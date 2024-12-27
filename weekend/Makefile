@@ -2,7 +2,7 @@ sample-ppm: raytracer
 	./raytracer > img.ppm
 	xdg-open img.ppm
 
-raytracer: main.cpp vec3.h
+raytracer: main.cpp vec3.h color.h ray.h
 	g++ -o raytracer main.cpp -lm
 
 clean:

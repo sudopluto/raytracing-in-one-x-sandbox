@@ -1,24 +1,32 @@
 #include <iostream>
 
+#include "color.h"
 #include "vec3.h"
 
 int main(void) {
-    const int img_width = 200;
-    const int img_height = 100;
+
+    auto aspect_ratio = 16.0 / 9.0;
+    int img_width = 400;
+
+    int img_height = int(img_width / aspect_ratio);
+    img_height = (img_height < 1) ? 1 : img_height;
+
+    auto viewport_height = 2.0;
+    auto viewport_width = viewport_height * (double(img_width)/img_height);
 
     std::cout << "P3\n" << img_width << ' ' << img_height << "\n255\n";
 
-    for (int j = img_height -1; j >= 0; --j) {
-        std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-        vec3 color;
-        color[2] = 0.2;
-        for (int i = 0; i < img_width; ++i) {
-            color[0] = double(i) / img_width;
-            color[1] = double(j) / img_height;
-            color.write_color(std::cout);
+    for (int j = 0; j < img_height; j++) {
+        std::clog << "\rScanlines remaining: " << (img_height - j) << ' ' << std::flush;
+        for (int i = 0; i < img_width; i++) {
+            auto r = double(i) / (img_width - 1);
+            auto g = double(j) / (img_height - 1);
+            auto b = 0.0;
+            color pixel_color(r, g, b);
+            write_color(std::cout, pixel_color);
         }
     }
-    std::cerr << "\nDone\n";
+    std::clog << "\rDone!                 \n";
 
     return 0;
 }
